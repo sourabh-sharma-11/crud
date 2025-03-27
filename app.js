@@ -4,7 +4,7 @@ const userModel = require("./usermodel")
 
 const app = express()
 
-
+app.use(express.json())
 app.get('/create', async (req,res)=> {
    let createduser = await userModel.create({
        name :"sourabh",
@@ -15,14 +15,15 @@ app.get('/create', async (req,res)=> {
 })
 
 
-app.put('/:id', async (req, res) => {
+app.put('/update/:id', async (req, res) => {
     try {
-        const id = req.params.id;
+        const {id} = req.params;
         const userData = req.body;
+        
 
         const updatedUser = await userModel.findByIdAndUpdate(
          id,
-            user,
+         userData,
         );
 
         if (!updatedUser) {
@@ -36,22 +37,19 @@ app.put('/:id', async (req, res) => {
 });
 
 
-app.get('/delete', async (req, res) => {
+app.delete('/delete/:id', async (req, res) => {
     try {
         const id = req.params.id;
-        const userData = req.body;
 
-        const deletedUser = await userModel.getByIdAndDelete(
-            id, 
-            user, 
-            { new: true } 
+        const deletedUser = await userModel.findByIdAndDelete(
+            id
         );
 
         if (!deletedUser) {
             return res.status(404).send({ message: "User not found" });
         }
 
-        res.send(updatedUser);
+        res.send(deletedUser);
     } catch (error) {
         res.status(500).send({ error: error.message });
     }
