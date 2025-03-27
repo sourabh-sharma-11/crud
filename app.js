@@ -24,6 +24,9 @@ app.put('/update/:id', async (req, res) => {
         const updatedUser = await userModel.findByIdAndUpdate(
          id,
          userData,
+         {
+            new:true
+         }
         );
 
         if (!updatedUser) {
